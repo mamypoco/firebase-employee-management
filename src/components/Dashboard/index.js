@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../config/firestore";
 
 import Header from "./Header";
@@ -36,7 +36,7 @@ const Dashboard = ({ setIsAuthenticated }) => {
     setIsEditing(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     Swal.fire({
       icon: "warning",
       title: "Are you sure?",
@@ -49,6 +49,7 @@ const Dashboard = ({ setIsAuthenticated }) => {
         const [employee] = employees.filter((employee) => employee.id === id);
 
         // TODO delete document
+        deleteDoc(doc(db, "employees", id));
 
         Swal.fire({
           icon: "success",
