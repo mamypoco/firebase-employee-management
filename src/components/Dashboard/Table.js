@@ -1,10 +1,9 @@
-import React from 'react';
+import React from "react";
 
 const Table = ({ employees, handleEdit, handleDelete }) => {
-
-  const formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
     minimumFractionDigits: null,
   });
 
@@ -54,7 +53,7 @@ const Table = ({ employees, handleEdit, handleDelete }) => {
             ))
           ) : (
             <tr>
-              <td colSpan={7}>No Employees</td>
+              <td colSpan={7}>Loading...</td>
             </tr>
           )}
         </tbody>
