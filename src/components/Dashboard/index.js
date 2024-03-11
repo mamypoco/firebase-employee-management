@@ -84,6 +84,7 @@ const Dashboard = ({ setIsAuthenticated }) => {
       {isAdding && (
         <Add
           employees={employees}
+          getEmployees={getEmployees}
           setEmployees={setEmployees}
           setIsAdding={setIsAdding}
         />
