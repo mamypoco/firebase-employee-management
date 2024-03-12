@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
-import Swal from 'sweetalert2';
+import React, { useState } from "react";
+import Swal from "sweetalert2";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../config/firestore";
 
-const Edit = ({ employees, selectedEmployee, setEmployees, setIsEditing }) => {
+const Edit = ({
+  employees,
+  selectedEmployee,
+  setEmployees,
+  setIsEditing,
+  getEmployees,
+}) => {
   const id = selectedEmployee.id;
 
   const [firstName, setFirstName] = useState(selectedEmployee.firstName);
@@ -10,14 +18,14 @@ const Edit = ({ employees, selectedEmployee, setEmployees, setIsEditing }) => {
   const [salary, setSalary] = useState(selectedEmployee.salary);
   const [date, setDate] = useState(selectedEmployee.date);
 
-  const handleUpdate = e => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
 
     if (!firstName || !lastName || !email || !salary || !date) {
       return Swal.fire({
-        icon: 'error',
-        title: 'Error!',
-        text: 'All fields are required.',
+        icon: "error",
+        title: "Error!",
+        text: "All fields are required.",
         showConfirmButton: true,
       });
     }
@@ -31,14 +39,17 @@ const Edit = ({ employees, selectedEmployee, setEmployees, setIsEditing }) => {
       date,
     };
 
-    // TODO: Update document
+    await setDoc(doc(db, "employees", id), {
+      ...employee,
+    });
 
     setEmployees(employees);
     setIsEditing(false);
+    getEmployees();
 
     Swal.fire({
-      icon: 'success',
-      title: 'Updated!',
+      icon: "success",
+      title: "Updated!",
       text: `${employee.firstName} ${employee.lastName}'s data has been updated.`,
       showConfirmButton: false,
       timer: 1500,
@@ -55,7 +66,7 @@ const Edit = ({ employees, selectedEmployee, setEmployees, setIsEditing }) => {
           type="text"
           name="firstName"
           value={firstName}
-          onChange={e => setFirstName(e.target.value)}
+          onChange={(e) => setFirstName(e.target.value)}
         />
         <label htmlFor="lastName">Last Name</label>
         <input
@@ -63,7 +74,7 @@ const Edit = ({ employees, selectedEmployee, setEmployees, setIsEditing }) => {
           type="text"
           name="lastName"
           value={lastName}
-          onChange={e => setLastName(e.target.value)}
+          onChange={(e) => setLastName(e.target.value)}
         />
         <label htmlFor="email">Email</label>
         <input
@@ -71,7 +82,7 @@ const Edit = ({ employees, selectedEmployee, setEmployees, setIsEditing }) => {
           type="email"
           name="email"
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <label htmlFor="salary">Salary ($)</label>
         <input
@@ -79,7 +90,7 @@ const Edit = ({ employees, selectedEmployee, setEmployees, setIsEditing }) => {
           type="number"
           name="salary"
           value={salary}
-          onChange={e => setSalary(e.target.value)}
+          onChange={(e) => setSalary(e.target.value)}
         />
         <label htmlFor="date">Date</label>
         <input
@@ -87,12 +98,12 @@ const Edit = ({ employees, selectedEmployee, setEmployees, setIsEditing }) => {
           type="date"
           name="date"
           value={date}
-          onChange={e => setDate(e.target.value)}
+          onChange={(e) => setDate(e.target.value)}
         />
-        <div style={{ marginTop: '30px' }}>
+        <div style={{ marginTop: "30px" }}>
           <input type="submit" value="Update" />
           <input
-            style={{ marginLeft: '12px' }}
+            style={{ marginLeft: "12px" }}
             className="muted-button"
             type="button"
             value="Cancel"

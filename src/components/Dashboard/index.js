@@ -8,8 +8,6 @@ import Table from "./Table";
 import Add from "./Add";
 import Edit from "./Edit";
 
-// import { employeesData } from "../../data";
-
 const Dashboard = ({ setIsAuthenticated }) => {
   const [employees, setEmployees] = useState();
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -17,6 +15,7 @@ const Dashboard = ({ setIsAuthenticated }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const getEmployees = async () => {
+    //firestore - getDocs
     const querySnapshot = await getDocs(collection(db, "employees"));
     const employees = querySnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -48,7 +47,7 @@ const Dashboard = ({ setIsAuthenticated }) => {
       if (result.value) {
         const [employee] = employees.filter((employee) => employee.id === id);
 
-        // TODO delete document
+        //firestore --deleteDoc
         deleteDoc(doc(db, "employees", id));
 
         Swal.fire({
@@ -93,6 +92,7 @@ const Dashboard = ({ setIsAuthenticated }) => {
       {isEditing && (
         <Edit
           employees={employees}
+          getEmployees={getEmployees}
           selectedEmployee={selectedEmployee}
           setEmployees={setEmployees}
           setIsEditing={setIsEditing}
