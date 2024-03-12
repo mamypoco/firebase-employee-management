@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
+import { auth, googleProvider } from "../../config/firestore";
 import {
-  getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signInWithPopup,
 } from "firebase/auth";
 
 const Login = ({ setIsAuthenticated }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  //   const auth = getAuth();
+
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    const auth = getAuth();
 
     if (document.activeElement.name === "Login") {
       try {
@@ -78,6 +79,16 @@ const Login = ({ setIsAuthenticated }) => {
     }
   };
 
+  const signInWithGoogle = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      setIsAuthenticated(true);
+    } catch (err) {
+      console.log(err.code);
+      console.log(err.message);
+    }
+  };
+
   return (
     <div className="small-container">
       <form onSubmit={handleLogin}>
@@ -118,6 +129,18 @@ const Login = ({ setIsAuthenticated }) => {
           value="Register"
           name="Register"
         />
+        <button
+          className="google-signin-button"
+          onClick={signInWithGoogle}
+          style={{
+            marginTop: "12px",
+            marginLeft: "12px",
+            backgroundColor: "gray",
+            borderStyle: "none",
+          }}
+        >
+          Login With Google
+        </button>
       </form>
     </div>
   );
